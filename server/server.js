@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import connectDB from './config/mongodb.js';
 import authRouter from './routes/authRoute.js';
 import userRouter from './routes/user.Routes.js';
+import "dotenv/config.js";
 
 
 
@@ -19,6 +20,8 @@ app.use(cookieParser());
 
 
 app.use(cors({
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
 

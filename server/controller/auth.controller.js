@@ -49,7 +49,7 @@ export const register = async (req, res) => {
 
         await transporter.sendMail(mainOptions);
 
-        res.status(201).json({ message: "User registered successfully", user: { id: newUser._id, name: newUser.name, email: newUser.email } });
+        res.status(201).json({ message: "User registered successfully", user: { id: newUser._id, name: newUser.username, email: newUser.email } });
     } catch (error) {
         console.error("Registration error:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -69,13 +69,13 @@ export const login = async (req, res) => {
         // Check if user exists
         const user = await userModel.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(400).json({ message: "Invalid Email" });
         }
 
         // Check password
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(400).json({ message: "Invalid Password" });
         }
 
         // Generate JWT token
@@ -90,7 +90,7 @@ export const login = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
-        res.status(200).json({ message: "User logged in successfully", user: { id: user._id, name: user.name, email: user.email } });
+        res.status(200).json({ message: "User logged in successfully", user: { id: user._id, name: user.username, email: user.email, isVerified: user.isVerified } });
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -187,7 +187,7 @@ export const verifyEmail = async (req, res) => {
     user.verifyOtpExpires = 0;
     await user.save();
 
-    res.status(200).json({message:"Email verified successfully!"});
+    res.status(200).json({message:"Email verified successfully!", user:{id: user._id, name: user.username, email: user.email, isVerified: user.isVerified}});
 }
 
 // Function to check if the user is authenticated
@@ -204,7 +204,7 @@ export const isAuthenticated = async (req,res) => {
             return res.status(404).json({ message: "User not found or not verified" });
         }
 
-        res.status(200).json({ message: "User is authenticated", user: { id: user._id, name: user.name, email: user.email, isVerified: user.isVerified } });
+        res.status(200).json({ message: "User is authenticated", user: { id: user._id, name: user.username, email: user.email, isVerified: user.isVerified } });
     } catch (error) {
         console.error("Authentication check error:", error);
         res.status(500).json({ message: "Internal server error" });

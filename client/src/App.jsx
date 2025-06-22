@@ -1,13 +1,30 @@
 import React from 'react'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import ResetPassword from './pages/ResetPassword'
+import VerifyEmail from './pages/VerifyEmail'
+import { Route,Routes } from 'react-router-dom'
+import { AppProvider } from './context/AppContext'
+import { ToastContainer } from 'react-toastify'
+import { CookiesProvider } from 'react-cookie'
 
 
 const App = () => {
   return (
-    <div>
-      <h1 className='text-3xl font-bold'>Welcome to the React App</h1>
+    <CookiesProvider>
+      <AppProvider> 
 
-    </div>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+          </Routes>
+
+      <ToastContainer />
+    </AppProvider>
+    </CookiesProvider>
   )
 }
 
-export default App
+export default App;
