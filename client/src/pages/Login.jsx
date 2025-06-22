@@ -185,7 +185,10 @@ const Login = () => {
           </button>
           <p className="text-center text-sm mb-6">Already have an Account?</p>
           <button
-            onClick={() => setState(state === "Sign Up" ? "Login" : "Sign Up")}
+            onClick={(e) => {
+              e.preventDefault();
+              setState(state === "Sign Up" ? "Login" : "Sign Up");
+            }}
             className="w-full bg-gradient-to-br from-purple-500 to-purple-900 text-white px-4 py-2 rounded-full cursor-pointer hover:scale-105 transition-all duration-300"
           >
             {state === "Sign Up"
